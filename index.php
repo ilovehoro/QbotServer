@@ -4,7 +4,7 @@ require_once 'lib/function.php';
 /* 预处理页面 */
 header("Content-type: text/html; charset=gbk");
 date_default_timezone_set('PRC');
-$key = 'iEV7roTD';
+$key = '123';
 /* 预处理请求 */
 if(!isset($_POST['key'])){exit('未授权');}
 if(!isset($_POST['msg'])){exit('获取消息失败');}

@@ -2,7 +2,7 @@
 
 define('DB_HOST','localhost');
 define('DB_USER','qqbot');
-define('DB_PWD','qqbot');
+define('DB_PWD','huaban1993');
 define('DB_DBNAME','qqbot');
 define('DB_CHARSET','gbk');
 define('DB_TYPE','mysql'); 

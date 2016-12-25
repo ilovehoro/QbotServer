@@ -14,7 +14,7 @@ class Check
 		$this->db = $db;
 		$argument_arr = explode(" ",$msg);
 		$this->json_arr = [
-			"status" => 0,
+			"status" => 1,
 			"at_qq" =>$qq,
 			"msg" => "",
 		];
@@ -23,6 +23,7 @@ class Check
 		$res = $db->select('muti-command','*');
 		/* 筛选并执行指令 */
 		if(count($argument_arr) == 1) {
+		    $this->check_is_new_face($argument_arr[0]);
 			/* 处理不带参数的指令 */
 			$res = $db->select('muti-command','*',[
 				"name" => $msg
@@ -32,6 +33,7 @@ class Check
 				$this->to_json();
 			}
 		}else{
+            $this->check_is_new_face($argument_arr[0]);
 			/* 处理带参数的指令 */
 			$res = $db->select('muti-command','*',[
 				"name" => $argument_arr[0]
@@ -66,7 +68,7 @@ class Check
 
 		if(in_array($msg, $new_face_arr) || in_array(mb_substr($msg,0,0,'utf-8'), $new_face_arr) || in_array(mb_substr($msg,0,1,'utf-8'), $new_face_arr) || in_array(mb_substr($msg,0,2,'utf-8'), $new_face_arr) || in_array(mb_substr($msg,0,3,'utf-8'), $new_face_arr))
 		{
-			$this->json_arr->status = 'h';
+			$this->json_arr['status'] = 'h';
 			$this->to_json();
 		}
 	}

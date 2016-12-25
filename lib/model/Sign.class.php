@@ -64,13 +64,13 @@ class Sign extends Base
 	}
 
 	//设置卡片信息
-	function set_sign_info($title,$content,$img='',$link='http://ss.moehoro.com/')
+	function set_sign_info($title,$content,$link='http://ss.moehoro.com/')
     {
         $this->cq_card = [
             "code" => 1,
             "title" => $title,
             "content" => $content,
-            "img" => $img,
+            "img" => 'http://qqbot.getfree.cn/static/horo/'.rand(1,18).'.jpg',
             "link" => $link
         ];
         array_push($this->json_arr['cq'],$this->cq_card);

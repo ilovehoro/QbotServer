@@ -1,60 +1,33 @@
 <?php
-require_once 'lib/db.php';
-require_once 'lib/function.php';
-/* Ô¤´¦ÀíÒ³Ãæ */
-header("Content-type: text/html; charset=gbk");
+require_once 'lib/init.php';
+
+header( 'Content-Type: application/json;charset=utf8' );
+header( 'Pragma: no-cache' );
+header( 'Cache-Control: no-cache, no-store, max-age=0' );
+header( 'Expires: 1L' );
+
 date_default_timezone_set('PRC');
-$key = '123';
-/* Ô¤´¦ÀíÇëÇó */
-if(!isset($_POST['key'])){exit('Î´ÊÚÈ¨');}
-if(!isset($_POST['msg'])){exit('»ñÈ¡ÏûÏ¢Ê§°Ü');}
-if(!isset($_POST['qq'])){exit('»ñÈ¡ÓÃ»§ĞÅÏ¢Ê§°Ü');}
-if($_POST['key'] != $key){exit('ÊÚÈ¨Ê§°Ü');}
-$qq = $_POST['qq'];
-/* ´¦Àímessage */
-$msg = substr($_POST['msg'], 1);
-$msg = trim($msg);
-$arr = explode(" ",$msg);
-/* ¼ÓÔØËùÓĞÖ¸Áî */
-$res = $db->select('muti-function','*');
-/* É¸Ñ¡²¢Ö´ĞĞÖ¸Áî */
-if(count($arr) == 1) {
-	/* ´¦Àí²»´ø²ÎÊıµÄÖ¸Áî */
-	$res = $db->select('muti-function','*',[
-		"name" => $msg
-	]);
-	if($res){
-		$res = $db->select('function','*',[
-			"id" => $res[0]['fid']
-		]);
-		/* ÅĞ¶ÏÖ¸Áî´¦Àí·½Ê½ */
-		if($res[0]['max_param'] > 0){
-			call_user_func($res[0]['name'],$db,$qq,$msg);
-			exit();
-		}else{
-			call_user_func($res[0]['name'],$db,$qq);
-			exit();
-		}
-	}
+
+if(!isset($_POST['key'])){
+	exit('éæ³•æˆæƒï¼');
+}elseif(!isset($_POST['msg'])){
+	exit('ç¼ºå°‘å‚æ•°msg');
+}elseif(!isset($_POST['qq'])){
+	exit('ç¼ºå°‘å‚æ•°msg');
+}elseif($_POST['key'] != $key){
+	exit('ç¼ºå°‘å‚æ•°msg');
 }else{
-	/* ´¦Àí´ø²ÎÊıµÄÖ¸Áî */
-	$res = $db->select('muti-function','*',[
-		"name" => $arr[0]
-	]);
-	if($res){
-		$res = $db->select('function','*',[
-			"id" => $res[0]['fid']
-		]);
-		/* Ô¤´¦Àí²ÎÊıÊıÁ¿ÎÊÌâ */
-		if($res[0]['max_param'] < count($arr)-1){
-			exit("²ÎÊıÊıÁ¿³¬¹ıÏŞÖÆ£¬Çë¼ì²éÖ¸Áî£¬¿ÉÊäÈë'/help Ö¸ÁîÃû' ²é¿´°ïÖúĞÅÏ¢:\n");
-		}else{
-			//µ÷ÓÃ·½·¨
-			call_user_func($res[0]['name'],$db,$qq,$msg);
-			exit();
-		}
-	}
+	$msg = characet($_POST['msg']);
+	$qq = $_POST['qq'];
 }
-/* ·µ»Ø´íÎóĞÅÏ¢ */
-exit('Î´ÕÒµ½Ö¸Áî£º'.$msg);
+
+$msg = trim($msg);
+$msg = substr($_POST['msg'], 1);
+$arr = explode(" ",$msg);
+
+$check = new Check($db,$qq,$msg);
+
+$command_class = $check->get_command_class($arr[0]);
+
+$command = new $command_class($db,$qq,$msg);
 ?>

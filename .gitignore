@@ -1,0 +1,5 @@
+app/
+
+.idea/
+
+lib/config.php

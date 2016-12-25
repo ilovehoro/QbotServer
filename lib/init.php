@@ -1,13 +1,8 @@
 <?php
 
-define('DB_HOST','localhost');
-define('DB_USER','qqbot');
-define('DB_PWD','huaban1993');
-define('DB_DBNAME','qqbot');
-define('DB_CHARSET','gbk');
-define('DB_TYPE','mysql'); 
-
+require_once 'config.php';
 require_once 'Medoo.php';
+require_once 'model/Base.class.php';
 
 $db = new medoo([
     // required
@@ -25,3 +20,21 @@ $db = new medoo([
         PDO::ATTR_CASE => PDO::CASE_NATURAL
     ]
 ]);
+
+function __autoload($class)   
+{   
+    require_once('model/'.$class.'.class.php');   
+}
+
+function characet($data)
+{
+  if(!empty($data))
+  {
+    $fileType = mb_detect_encoding($data , array('UTF-8','GBK','LATIN1','BIG5')) ;
+    if( $fileType != 'UTF-8')
+    {
+      $data = mb_convert_encoding($data ,'utf-8' , $fileType);
+    }
+  }
+  return $data;
+}
